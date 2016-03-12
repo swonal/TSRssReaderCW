@@ -14,9 +14,11 @@ import java.util.List;
 import com.trafficscotlandfeedpullparser.feed.data.RssFeedItem;
 import com.trafficscotlandfeedpullparser.feed.util.XMLPullParserHandler;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -24,14 +26,17 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
  
 public class DisplayItems extends Activity {
  
     ListView listView;
     String xml;
     private List<RssFeedItem> rssItems = new ArrayList<RssFeedItem>();
+    Bundle extras;
     //Indicate which feed was selected
     int id;
+	ProgressDialog progress;
      
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,31 +46,17 @@ public class DisplayItems extends Activity {
         Log.e("tag", "beginning");
         
         listView = (ListView) findViewById(R.id.list);
-        Bundle extras = getIntent().getExtras();
+        extras = getIntent().getExtras();
         id = extras.getInt("id");
         
-        if(extras != null){
-			 try {
-				 Log.e("tag", "Parse xml");
-				xml = sourceListingString(extras.getString("ci"));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Log.e("tag", "xml not assigned");
-				e.printStackTrace();
-			}
-        }
+        new GetRssTask().execute();
+        
         
         Log.e("tag", "before parse");
         
         
-        XMLPullParserHandler parser = new XMLPullParserHandler();
-        Log.e("tag", "before parser.parse xml" + xml);
-		rssItems = parser.parse(xml, id);
-		Log.e("tag", "before adapter" + rssItems.toString());
-		ArrayAdapter<RssFeedItem> adapter = new MyListAdapter();
-//		    new ArrayAdapter<RssFeedItem>(this,R.layout.item_view, rssItems);
-		Log.e("tag", "before set adapter");
-		listView.setAdapter(adapter);
+
+
     }
     
     
@@ -183,7 +174,50 @@ public class DisplayItems extends Activity {
     	
     } // End of sourceListingString
     
+private class GetRssTask extends AsyncTask<Void, String, Void>{
+	@Override
+	protected void onPreExecute() {
+		progress = new ProgressDialog(DisplayItems.this);
+		progress.setTitle("Retreiving RSS");
+		progress.setMessage("Loading RSS... \nTypically less than 10 seconds");
+		progress.setCancelable(false);
+		progress.setCanceledOnTouchOutside(false);
+		progress.show();
+	}
+	
+	@Override
+		protected Void doInBackground(Void... params) {
+		try {
+			xml = sourceListingString(extras.getString("ci"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		publishProgress("Download Rss Feed Successful \nParsing...");
 
+        XMLPullParserHandler parser = new XMLPullParserHandler();
+		rssItems = parser.parse(xml, id);
+		publishProgress("Parsing Successful");
+
+			return null;
+		}
+	
+	@Override
+		protected void onProgressUpdate(String... values) {
+		progress.setMessage(values[0]);
+		}
+	
+	@Override
+		protected void onPostExecute(Void result) {
+		ArrayAdapter<RssFeedItem> adapter = new MyListAdapter();
+
+		listView.setAdapter(adapter);
+		
+		progress.dismiss();
+		
+		Toast.makeText(DisplayItems.this, "Completed", Toast.LENGTH_LONG).show();
+		}
+}
     
     
     @Override
