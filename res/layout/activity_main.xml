@@ -1,0 +1,47 @@
+	<RelativeLayout xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+  		  android:layout_height="match_parent" android:paddingLeft="1dp"
+  		  android:paddingRight="1dp"
+  		  android:paddingTop="1dp"
+  		  android:paddingBottom="1dp" tools:context=".MainActivity" xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+
+    <Button
+        android:id="@+id/curButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleMain"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="98dp"
+        android:text="@string/curBut" />
+
+    <Button
+        android:id="@+id/rwButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/curButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:text="@string/rwBut" />
+
+    <Button
+        android:id="@+id/prwButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rwButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="56dp"
+        android:text="@string/prwBut" />
+
+    <TextView
+        android:id="@+id/titleMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="35dp"
+        android:text="@string/titleMain"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+</RelativeLayout>
+
