@@ -23,6 +23,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -216,6 +218,13 @@ private class GetRssTask extends AsyncTask<Void, String, Void>{
 		progress.dismiss();
 		
 		Toast.makeText(DisplayItems.this, "Completed", Toast.LENGTH_LONG).show();
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?>parent, View view, int position, long rowid){
+				//parent.getItemAtPosition(position)
+				//adapt.getItem(position).getDescription();
+			}
+		});
 		}
 }
     

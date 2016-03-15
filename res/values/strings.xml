@@ -8,5 +8,6 @@
     <string name="curBut">Current Incident</string>
     <string name="rwBut">Roadwork</string>
     <string name="prwBut">Planned Roadwork</string>
+    <string name="stdid">S1302770</string>
 
 </resources>
