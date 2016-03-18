@@ -39,6 +39,7 @@ public class DisplayItems extends Activity {
     //Indicate which feed was selected
     int id;
 	ProgressDialog progress;
+	ArrayAdapter<RssFeedItem> adapter;
      
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,13 @@ public class DisplayItems extends Activity {
         
         new GetRssTask().execute();
         
+        listView.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?>parent, View view, int position, long rowid){
+				parent.getItemAtPosition(position);
+				//String tempDesc = adapter.getItem(position).getDescription();
+				Toast.makeText(DisplayItems.this, "Clicked " + position + "\n" + tempDesc, Toast.LENGTH_LONG).show();
+			}
+		});
         
         Log.e("tag", "before parse");
         
@@ -211,7 +219,7 @@ private class GetRssTask extends AsyncTask<Void, String, Void>{
 	
 	@Override
 		protected void onPostExecute(Void result) {
-		ArrayAdapter<RssFeedItem> adapter = new MyListAdapter();
+		adapter = new MyListAdapter();
 
 		listView.setAdapter(adapter);
 		
@@ -219,12 +227,7 @@ private class GetRssTask extends AsyncTask<Void, String, Void>{
 		
 		Toast.makeText(DisplayItems.this, "Completed", Toast.LENGTH_LONG).show();
 		
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?>parent, View view, int position, long rowid){
-				//parent.getItemAtPosition(position)
-				//adapt.getItem(position).getDescription();
-			}
-		});
+		
 		}
 }
     
