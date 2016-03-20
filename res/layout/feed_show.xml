@@ -4,21 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".XMLPullParserActivity" >
- 
+
+    <SearchView
+        android:id="@+id/sv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" >
+    </SearchView>
+
     <TextView
         android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/sv"
         android:layout_centerHorizontal="true"
         android:text="@string/stdid"
         android:textColor="#CC0033"
         android:textSize="16sp" />
- 
+    
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/text" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/text" >
+
+    </ListView>
  
 </RelativeLayout>

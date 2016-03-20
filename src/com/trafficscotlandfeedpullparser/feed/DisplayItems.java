@@ -25,8 +25,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
  
@@ -40,6 +42,7 @@ public class DisplayItems extends Activity {
     int id;
 	ProgressDialog progress;
 	ArrayAdapter<RssFeedItem> adapter;
+	private SearchView sv;
      
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,7 @@ public class DisplayItems extends Activity {
         Log.e("tag", "beginning");
         
         listView = (ListView) findViewById(R.id.list);
+        sv =(SearchView)findViewById(R.id.sv);
         extras = getIntent().getExtras();
         id = extras.getInt("id");
         
@@ -57,9 +61,24 @@ public class DisplayItems extends Activity {
         listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?>parent, View view, int position, long rowid){
 				parent.getItemAtPosition(position);
-				//String tempDesc = adapter.getItem(position).getDescription();
+				String tempDesc = adapter.getItem(position).getDescription();
 				Toast.makeText(DisplayItems.this, "Clicked " + position + "\n" + tempDesc, Toast.LENGTH_LONG).show();
 			}
+		});
+        
+        sv.setOnQueryTextListener(new OnQueryTextListener()
+		{
+			@Override 
+			public boolean onQueryTextChange(String text) 
+			{
+				adapter.getFilter().filter(text);
+				return true;
+			}
+			@Override
+			public boolean onQueryTextSubmit(String text) 
+			{
+				return false;
+			}	
 		});
         
         Log.e("tag", "before parse");
