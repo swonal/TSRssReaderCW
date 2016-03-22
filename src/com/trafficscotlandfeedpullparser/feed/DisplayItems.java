@@ -9,6 +9,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import com.trafficscotlandfeedpullparser.feed.data.RssFeedItem;
@@ -42,7 +44,7 @@ public class DisplayItems extends Activity {
     int id;
 	ProgressDialog progress;
 	ArrayAdapter<RssFeedItem> adapter;
-	private SearchView sv;
+	SearchView sv;
      
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,22 @@ public class DisplayItems extends Activity {
         
         new GetRssTask().execute();
         
+        sv.setOnQueryTextListener(new OnQueryTextListener()
+		{
+			@Override 
+			public boolean onQueryTextChange(String text) 
+			{
+				Log.e("Tag", text);
+				adapter.getFilter().filter(text);
+				return false;
+			}
+			@Override
+			public boolean onQueryTextSubmit(String text) 
+			{
+				return false;
+			}	
+		});
+        
         listView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?>parent, View view, int position, long rowid){
 				parent.getItemAtPosition(position);
@@ -66,20 +84,7 @@ public class DisplayItems extends Activity {
 			}
 		});
         
-        sv.setOnQueryTextListener(new OnQueryTextListener()
-		{
-			@Override 
-			public boolean onQueryTextChange(String text) 
-			{
-				adapter.getFilter().filter(text);
-				return true;
-			}
-			@Override
-			public boolean onQueryTextSubmit(String text) 
-			{
-				return false;
-			}	
-		});
+        
         
         Log.e("tag", "before parse");
         
@@ -239,6 +244,12 @@ private class GetRssTask extends AsyncTask<Void, String, Void>{
 	@Override
 		protected void onPostExecute(Void result) {
 		adapter = new MyListAdapter();
+		
+		Collections.sort(rssItems, new Comparator<RssFeedItem>(){
+		    public int compare(RssFeedItem rss1, RssFeedItem rss2) {
+		        return rss1.getTitle().compareToIgnoreCase(rss2.getTitle());
+		    }
+		});
 
 		listView.setAdapter(adapter);
 		
